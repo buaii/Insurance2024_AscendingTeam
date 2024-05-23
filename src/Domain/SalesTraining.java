@@ -19,7 +19,7 @@ public class SalesTraining extends Employee {
 	}
 
 	public void salesTrain(){
-
+		
 	}
 
 }
