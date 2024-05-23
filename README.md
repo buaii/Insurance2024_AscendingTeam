@@ -12,4 +12,5 @@
 60221336 은예원
 
 
-
+### UML ( UseCase Analyze )
+![image](https://github.com/buaii/Insurance2024_AscendingTeam/assets/129252044/22d648ee-ff19-4047-a961-e62179a0fa68)
