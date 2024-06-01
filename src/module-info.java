@@ -5,5 +5,6 @@
  * 
  */
 module Insurance2024 {
-	requires java.desktop;
+    requires java.desktop;
+    exports Main;
 }
