@@ -5,15 +5,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import Insurance.Insurance;
 import Insurance.InsuranceListImpl;
+import Constract.ConstractListImpl;
 
 public class InsuranceService {
 
     private InsuranceListImpl insuranceList;
     private MenuService menuService;
-
-    public InsuranceService() {
+    private ConstractListImpl constractList;
+    
+    public InsuranceService(CustomerService customerService) {
         this.insuranceList = new InsuranceListImpl();
         this.menuService = new MenuService();
+        this.constractList = new ConstractListImpl(customerService);
     }
 
     public void handleInsuranceMenu(BufferedReader reader) throws IOException {
@@ -23,15 +26,18 @@ public class InsuranceService {
             case "1":
                 menuService.showInsuranceTypeMenu();
                 String typeChoice = reader.readLine().trim();
-                showInsuranceInfo(reader, typeChoice);
+               this.showInsuranceInfo(reader, typeChoice);
                 break;
             case "2":
-                System.out.println("보험 가입 기능은 아직 구현되지 않았습니다.");
+            	constractList.selectInsuranceTypeAndApply(reader);
                 break;
             default:
-                System.out.println("\n유효하지 않은 값입니다. 초기 화면으로 돌아갑니다.\n");
+                System.out.println("\n올바르지 않은 입력입니다. 다시 입력해주세요");
+                this.handleInsuranceMenu(reader);
+                
         }
     }
+    
 
     public void showInsuranceInfo(BufferedReader reader, String typeChoice) throws IOException {
         ArrayList<Insurance> list;
@@ -64,10 +70,10 @@ public class InsuranceService {
     }
 
     private void handleInsuranceSelection(BufferedReader reader, ArrayList<Insurance> list) throws IOException {
-        System.out.println("\n원하는 작업을 선택하세요:");
-        System.out.println("1. 보험료 확인");
+        System.out.println("\n1. 보험료 확인");
         System.out.println("2. 상품 세부 정보");
         System.out.println("3. 상품 가입");
+        System.out.println("\n원하는 서비스를 선택하세요:");
         String choice = reader.readLine().trim();
 
         switch (choice) {
@@ -78,10 +84,11 @@ public class InsuranceService {
                 viewInsuranceDetails(reader, list);
                 break;
             case "3":
-                applyForInsurance(reader, list);
+            	constractList.selectInsuranceTypeAndApply(reader);
                 break;
             default:
-                System.out.println("\n유효하지 않은 값입니다. 초기 화면으로 돌아갑니다.\n");
+                System.out.println("\n유효하지 않은 값입니다. 다시 입력해주세요.\n");
+                this.handleInsuranceSelection(reader, list);
         }
     }
 
@@ -93,9 +100,10 @@ public class InsuranceService {
         int index = Integer.parseInt(reader.readLine().trim()) - 1;
         if (index >= 0 && index < list.size()) {
             System.out.println("\n[" + list.get(index).getName() + "]의 보험료는 " + list.get(index).getPremium() + "입니다.");
-            showPostSelectionMenu(reader, list, index);
+            this.handleInsuranceSelection(reader, list);
         } else {
-            System.out.println("\n유효하지 않은 번호입니다. 초기 화면으로 돌아갑니다.\n");
+            System.out.println("\n유효하지 않은 번호입니다. 다시 입력해주세요.");
+            this.checkInsurancePremium(reader, list);
         }
     }
 
@@ -113,50 +121,10 @@ public class InsuranceService {
             System.out.println("기간: " + list.get(index).getTerm());
             System.out.println("최대 나이: " + list.get(index).getMaxAge());
             System.out.println("제외 사항: " + list.get(index).getExclusions());
-            showPostSelectionMenu(reader, list, index);
+            this.handleInsuranceSelection(reader, list);
         } else {
-            System.out.println("\n유효하지 않은 번호입니다. 초기 화면으로 돌아갑니다.\n");
-        }
-    }
-
-    private void applyForInsurance(BufferedReader reader, ArrayList<Insurance> list) throws IOException {
-        System.out.println("\n가입할 상품의 번호를 입력하세요:");
-        for (int i = 0; i < list.size(); ++i) {
-            System.out.println((i + 1) + ". " + list.get(i).getName());
-        }
-        int index = Integer.parseInt(reader.readLine().trim()) - 1;
-        if (index >= 0 && index < list.size()) {
-            System.out.println("\n[" + list.get(index).getName() + "]에 가입되었습니다.");
-            showPostSelectionMenu(reader, list, index);
-        } else {
-            System.out.println("\n유효하지 않은 번호입니다. 초기 화면으로 돌아갑니다.\n");
-        }
-    }
-
-    private void showPostSelectionMenu(BufferedReader reader, ArrayList<Insurance> list, int index) throws IOException {
-        System.out.println("\n1. [" + list.get(index).getName() + "]의 정보");
-        System.out.println("2. 상품 정보 메뉴");
-        System.out.println("3. 초기화면");
-        System.out.print("원하는 서비스를 선택하세요: ");
-        String choice = reader.readLine().trim();
-        switch (choice) {
-            case "1":
-                System.out.println("\n[" + list.get(index).getName() + "]의 세부 정보는 다음과 같습니다:");
-                System.out.println("설명: " + list.get(index).getDescription());
-                System.out.println("보험료: " + list.get(index).getPremium());
-                System.out.println("보상 한도: " + list.get(index).getCoverage());
-                System.out.println("기간: " + list.get(index).getTerm());
-                System.out.println("최대 나이: " + list.get(index).getMaxAge());
-                System.out.println("제외 사항: " + list.get(index).getExclusions());
-                break;
-            case "2":
-                handleInsuranceMenu(reader);
-                break;
-            case "3":
-                menuService.showMenu();
-                break;
-            default:
-                System.out.println("\n유효하지 않은 값입니다. 초기 화면으로 돌아갑니다.\n");
+        	System.out.println("\n유효하지 않은 번호입니다. 다시 입력해주세요.");
+        	this.viewInsuranceDetails(reader, list);
         }
     }
 

@@ -3,6 +3,8 @@ package Main;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import Service.CustomerService;
 import Service.CustomerSupportService;
 import Service.InsuranceService;
 import Service.MarketingService;
@@ -16,10 +18,12 @@ public class MainController {
     private ProductDevelopmentService productDevelopmentService;
     private MarketingService marketingService;
     private MenuService menuService;
+    private CustomerService customerService;
 
     public MainController() {
         reader = new BufferedReader(new InputStreamReader(System.in));
-        insuranceService = new InsuranceService();
+        customerService = new CustomerService();
+        insuranceService = new InsuranceService(customerService);
         customerSupportService = new CustomerSupportService();
         productDevelopmentService = new ProductDevelopmentService();
         marketingService = new MarketingService();
@@ -94,6 +98,16 @@ public class MainController {
             }
         } catch (Exception e) {
             System.out.println(e);
+            this.pauseAndReturnToMain();
+        }
+    }
+    
+    private void pauseAndReturnToMain() {
+        try {
+            System.out.println("\n아무 키나 눌러 초기화면으로 돌아갑니다.");
+            reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

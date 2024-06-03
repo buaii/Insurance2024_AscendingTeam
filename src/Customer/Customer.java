@@ -1,182 +1,270 @@
 package Customer;
 
-import Constract.Contract;
-import CustomerValue.Abroad;
-import CustomerValue.Crime;
-import CustomerValue.Disease;
-import CustomerValue.Drive;
-import CustomerValue.Military;
+import Constract.Constract;
+import CustomerValue.*;
 import Insurance.Insurance;
 
-/**
- * @author eun94
- * @version 1.0
- * @created 22-5-2024 ���� 4:49:20
- */
 public class Customer {
+    private String id;
+    private String password;
+    private int customerNumber;
+    private String name;
+    private int age;
+    private String gender;
+    private String address;
+    private String phoneNumber;
+    private String job;
+    private String email;
+    private String birthdate;
+    private String creditRating;
+    private String abroad;
+    private String constractStatus;
+    private String crime;
+    private String disease;
+    private boolean drink;
+    private String drive;
+    private String hobby;
+    private String identityNum;
+    private boolean miltary;
+    private boolean smoke;
+    public Abroad m_Abroad;
+    public Drive m_Drive;
+    public Insurance m_Insurance;
+    public Crime m_Crime;
+    public Disease m_Disease;
+    public Constract m_Constract;
+    public Military m_Military;
 
-	private String abroad;
-	private String address;
-	private String constractStatus;
-	private String crime;
-	private String disease;
-	private String dob;
-	private boolean drink;
-	private String drive;
-	private String gender;
-	private String hobby;
-	private String hp;
-	private String identityNum;
-	private String job;
-	private boolean miltary;
-	private String name;
-	private boolean smoke;
-	public Abroad m_Abroad;
-	public Drive m_Drive;
-	public Insurance m_Insurance;
-	public Crime m_Crime;
-	public Disease m_Disease;
-	public Contract m_Constract;
-	public Military m_Military;
+    public Customer() {
+        this.id = "idNA";
+        this.password = "passwordNA";
+        this.customerNumber = 0;
+        this.name = "N/A";
+        this.age = 0;
+        this.gender = "N/A";
+        this.address = "N/A";
+        this.phoneNumber = "N/A";
+        this.job = "N/A";
+        this.email = "N/A";
+        this.birthdate = "N/A";
+        this.creditRating = "creditNA";
+        this.abroad = "N/A";
+        this.constractStatus = "N/A";
+        this.crime = "N/A";
+        this.disease = "N/A";
+        this.drink = false;
+        this.drive = "N/A";
+        this.hobby = "N/A";
+        this.identityNum = "N/A";
+        this.miltary = false;
+        this.smoke = false;
+    }
 
-	public Customer(){
+    public Customer(String id, String password, int customerNumber, String name, int age, String gender, String address, String phoneNumber, String job, String email, String birthdate) {
+        this.id = id;
+        this.password = password;
+        this.customerNumber = customerNumber;
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.job = job;
+        this.email = email;
+        this.birthdate = birthdate;
+        this.creditRating = "creditNA";  // 초기 값 설정
+        this.abroad = "N/A";
+        this.constractStatus = "N/A";
+        this.crime = "N/A";
+        this.disease = "N/A";
+        this.drink = false;
+        this.drive = "N/A";
+        this.hobby = "N/A";
+        this.identityNum = "N/A";
+        this.miltary = false;
+        this.smoke = false;
+    }
 
-	}
+    // Getters and Setters
+    public String getId() {
+        return id;
+    }
 
-	public void finalize() throws Throwable {
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void requestInsuranceInfo(){
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	}
+    public int getCustomerNumber() {
+        return customerNumber;
+    }
 
-	public String getAbroad() {
-		return abroad;
-	}
+    public void setCustomerNumber(int customerNumber) {
+        this.customerNumber = customerNumber;
+    }
 
-	public void setAbroad(String abroad) {
-		this.abroad = abroad;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getAddress() {
-		return address;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public int getAge() {
+        return age;
+    }
 
-	public String getConstractStatus() {
-		return constractStatus;
-	}
+    public void setAge(int age) {
+        this.age = age;
+    }
 
-	public void setConstractStatus(String constractStatus) {
-		this.constractStatus = constractStatus;
-	}
+    public String getGender() {
+        return gender;
+    }
 
-	public String getCrime() {
-		return crime;
-	}
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
-	public void setCrime(String crime) {
-		this.crime = crime;
-	}
+    public String getAddress() {
+        return address;
+    }
 
-	public String getDisease() {
-		return disease;
-	}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	public void setDisease(String disease) {
-		this.disease = disease;
-	}
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
-	public String getDob() {
-		return dob;
-	}
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
-	public void setDob(String dob) {
-		this.dob = dob;
-	}
+    public String getJob() {
+        return job;
+    }
 
-	public boolean isDrink() {
-		return drink;
-	}
+    public void setJob(String job) {
+        this.job = job;
+    }
 
-	public void setDrink(boolean drink) {
-		this.drink = drink;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public String getDrive() {
-		return drive;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public void setDrive(String drive) {
-		this.drive = drive;
-	}
+    public String getBirthdate() {
+        return birthdate;
+    }
 
-	public String getGender() {
-		return gender;
-	}
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
+    }
 
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
+    public String getCreditRating() {
+        return creditRating;
+    }
 
-	public String getHobby() {
-		return hobby;
-	}
+    public void setCreditRating(String creditRating) {
+        this.creditRating = creditRating;
+    }
 
-	public void setHobby(String hobby) {
-		this.hobby = hobby;
-	}
+    public String getAbroad() {
+        return abroad;
+    }
 
-	public String getHp() {
-		return hp;
-	}
+    public void setAbroad(String abroad) {
+        this.abroad = abroad;
+    }
 
-	public void setHp(String hp) {
-		this.hp = hp;
-	}
+    public String getConstractStatus() {
+        return constractStatus;
+    }
 
-	public String getIdentityNum() {
-		return identityNum;
-	}
+    public void setConstractStatus(String constractStatus) {
+        this.constractStatus = constractStatus;
+    }
 
-	public void setIdentityNum(String identityNum) {
-		this.identityNum = identityNum;
-	}
+    public String getCrime() {
+        return crime;
+    }
 
-	public String getJob() {
-		return job;
-	}
+    public void setCrime(String crime) {
+        this.crime = crime;
+    }
 
-	public void setJob(String job) {
-		this.job = job;
-	}
+    public String getDisease() {
+        return disease;
+    }
 
-	public boolean isMiltary() {
-		return miltary;
-	}
+    public void setDisease(String disease) {
+        this.disease = disease;
+    }
 
-	public void setMiltary(boolean miltary) {
-		this.miltary = miltary;
-	}
+    public boolean isDrink() {
+        return drink;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setDrink(boolean drink) {
+        this.drink = drink;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getDrive() {
+        return drive;
+    }
 
-	public boolean isSmoke() {
-		return smoke;
-	}
+    public void setDrive(String drive) {
+        this.drive = drive;
+    }
 
-	public void setSmoke(boolean smoke) {
-		this.smoke = smoke;
-	}
+    public String getHobby() {
+        return hobby;
+    }
 
+    public void setHobby(String hobby) {
+        this.hobby = hobby;
+    }
+
+    public String getIdentityNum() {
+        return identityNum;
+    }
+
+    public void setIdentityNum(String identityNum) {
+        this.identityNum = identityNum;
+    }
+
+    public boolean isMiltary() {
+        return miltary;
+    }
+
+    public void setMiltary(boolean miltary) {
+        this.miltary = miltary;
+    }
+
+    public boolean isSmoke() {
+        return smoke;
+    }
+
+    public void setSmoke(boolean smoke) {
+        this.smoke = smoke;
+    }
+
+    // toString 메소드
+    @Override
+    public String toString() {
+        return customerNumber + "," + id + "," + password + "," + name + "," + age + "," + gender + "," + address + "," + phoneNumber + "," + job + "," + email + "," + birthdate + "," + creditRating + "," + abroad + "," + constractStatus + "," + crime + "," + disease + "," + drink + "," + drive + "," + hobby + "," + identityNum + "," + miltary + "," + smoke;
+    }
 }
