@@ -1,3 +1,13 @@
+Insurance.java
+InsuranceListImpl.java
+MainController.java
+InsuranceService.java
+MenuSerivce.java
+
+위 클래스 중 변경사항 있을 시 유의해주세요. 수정된 클래스들입니다.
+
+# 상품 정보 요청 기능 완료
+
 # Insurance Program
 2024-1 Distributed Programming in MYONGJI University
 
