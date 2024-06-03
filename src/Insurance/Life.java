@@ -13,6 +13,7 @@ public class Life extends Insurance {
 		// TODO Auto-generated constructor stub
 	}
 
+	@SuppressWarnings("removal")
 	public void finalize() throws Throwable {
 		super.finalize();
 	}
