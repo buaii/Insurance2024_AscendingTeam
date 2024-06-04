@@ -41,6 +41,10 @@ public class InsuranceService {
 
     public void showInsuranceInfo(BufferedReader reader, String typeChoice) throws IOException {
         ArrayList<Insurance> list;
+        if(typeChoice==null) {
+        	menuService.showInsuranceTypeMenu();
+        	typeChoice = reader.readLine().trim();
+        }
         switch (typeChoice) {
             case "1":
                 list = insuranceList.loadInsurance("Data/Life.txt");
@@ -52,13 +56,9 @@ public class InsuranceService {
                 list = insuranceList.loadInsurance("Data/thirdParty.txt");
                 break;
             default:
-                System.out.println("\n유효하지 않은 값입니다. 초기 화면으로 돌아갑니다.\n");
+                System.out.println("\n올바르지 않은 값입니다. 다시 입력해주세요. \n");
+                this.showInsuranceInfo(reader, null);
                 return;
-        }
-
-        if (list.size() == 0) {
-            System.out.println("\n해당 종류의 보험이 존재하지 않습니다. 초기 화면으로 돌아갑니다.\n");
-            return;
         }
 
         System.out.println("\n------------상품 목록------------");
