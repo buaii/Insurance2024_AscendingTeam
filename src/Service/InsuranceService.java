@@ -3,9 +3,12 @@ package Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import Constract.ConstractListImpl;
 import Insurance.Insurance;
 import Insurance.InsuranceListImpl;
-import Constract.ConstractListImpl;
+import InsuranceValue.AccidentInfo;
+import InsuranceValue.RequestInsureInfo;
 
 public class InsuranceService {
 
@@ -128,8 +131,88 @@ public class InsuranceService {
         }
     }
 
-    public void requestPayment(BufferedReader reader) {
-        // 구현
+    public void requestPayment(BufferedReader reader) throws IOException {
+    	
+    	RequestInsureInfo reqInfo = new RequestInsureInfo();
+    	AccidentInfo accInfo = new AccidentInfo();
+    	
+    	System.out.println("\n---------- 보험금 청구 요청 ----------\n");
+    	
+    	System.out.println("[ 보험 계약자 정보를 입력하세요 ]");
+    	System.out.print("이름: ");
+    	String memInfo = reader.readLine() + "\n";
+    	System.out.print("주민등록번호: ");
+    	String ssn = reader.readLine().trim();
+    	memInfo += ssn + "\n";
+    	System.out.print("휴대폰 번호: ");
+    	memInfo += reader.readLine().trim() + "\n";
+    	reqInfo.setMemberInfo(memInfo);
+    	
+    	System.out.println("\n[ 사고 정보를 입력하세요 ]");
+    	System.out.print("사고 유형: ");
+    	String input = reader.readLine();
+    	String accInfoStr = input + "\n";
+    	accInfo.setType(input);
+    	System.out.print("청구 유형: ");
+    	input = reader.readLine();
+    	accInfoStr += input + "\n";
+    	accInfo.setBillType(input);
+    	System.out.print("사고 날짜: ");
+    	input = reader.readLine();
+    	accInfoStr += input + "\n";
+    	accInfo.setDate(input);
+    	System.out.print("사고 경위: ");
+    	input = reader.readLine();
+    	accInfoStr += input + "\n";
+    	accInfo.setDetails(input);
+    	System.out.print("진단 병원명: ");
+    	input = reader.readLine();
+    	accInfoStr += input + "\n";
+    	accInfo.setNameOfHospital(input);
+    	System.out.print("진단명: ");
+    	input = reader.readLine();
+    	accInfoStr += input + "\n";
+    	accInfo.setNameOfDisease(input);
+    	/* System.out.print("사고 현장 사진: ");
+    	accInfo.setScenePhoto(null); */
+    	reqInfo.setAccidentInfo(accInfoStr);
+    	reqInfo.m_AccidentInfo = accInfo;
+    	
+    	System.out.println("\n[ 보험 수익자 정보를 입력하세요 ]");
+    	System.out.print("이름: ");
+    	String beneInfo = reader.readLine() + "\n";
+    	System.out.print("계좌 번호: ");
+    	beneInfo += reader.readLine().trim() + "\n";
+    	System.out.print("휴대폰 번호: ");
+    	beneInfo += reader.readLine().trim() + "\n";
+    	reqInfo.setBeneficiaryInfo(beneInfo);
+    	
+    	// 보험 가입자인지 체크
+    	// ContractList에서 UserID로 가입자 찾기
+    	// 보험 가입자가 아니면 청구 접수 불가 출력
+    	
+    	System.out.println("\n청구 접수가 완료되었습니다. 담당자가 고객님의 휴대폰으로 연락드리겠습니다.");
+    	System.out.println("\n------------------------------------\n");
+    	
+    	System.out.println("[알림] 고객으로부터 사고가 접수되었습니다.");
+    	System.out.println("Enter를 눌러 확인하십시오.");
+    	
+    	if (!reader.readLine().trim().equals("")) return;
+    	
+    	System.out.println("----------- 청구 정보 -----------\n");
+    	System.out.println("[ 보험 계약자 정보 ]");
+    	System.out.println(reqInfo.getMemberInfo());
+    	System.out.println("[ 사고 정보 ]");
+    	System.out.println(reqInfo.getAccidentInfo());
+    	System.out.println("[ 보험 수익자 정보 ]");
+    	System.out.println(reqInfo.getBeneficiaryInfo());
+    	System.out.println("Enter를 눌러 사고 관련 보험 약관을 확인하십시오.");
+    	
+    	if (!reader.readLine().trim().equals("")) return;
+    	
+    	// 해당 고객이 가입한 보험의 약관을 출력
+    	
+
     }
 
     public void requestUnderwrite(BufferedReader reader) {
