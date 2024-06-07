@@ -23,10 +23,8 @@ public class Customer {
     private String disease;
     private boolean drink;
     private String drive;
-    private String hobby;
     private String identityNum;
     private boolean miltary;
-    private boolean smoke;
     public Abroad m_Abroad;
     public Drive m_Drive;
     public Insurance m_Insurance;
@@ -56,15 +54,15 @@ public class Customer {
         this.disease = "N/A";
         this.drink = false;
         this.drive = "N/A";
-        this.hobby = "N/A";
         this.identityNum = "N/A";
         this.miltary = false;
-        this.smoke = false;
         this.selectedInsuranceType = "N/A";
         this.selectedInsuranceName = "N/A";
     }
-    public Customer(String id, String password, int customerNumber, String name, int age, String gender, String address, String phoneNumber, String job, String email, String birthdate, String selectedInsuranceType, String selectedInsuranceName) {
-    	this.id = id;
+
+    public Customer(String id, String password, int customerNumber, String name, int age, String gender, String address, 
+                    String phoneNumber, String job, String email, String birthdate, String selectedInsuranceType, String selectedInsuranceName) {
+        this.id = id;
         this.password = password;
         this.customerNumber = customerNumber;
         this.name = name;
@@ -75,22 +73,19 @@ public class Customer {
         this.job = job;
         this.email = email;
         this.birthdate = birthdate;
-        this.creditRating = "creditNA";  // 초기 값 설정
+        this.creditRating = "creditNA"; 
         this.abroad = "N/A";
         this.constractStatus = "N/A";
         this.crime = "N/A";
         this.disease = "N/A";
         this.drink = false;
         this.drive = "N/A";
-        this.hobby = "N/A";
         this.identityNum = "N/A";
         this.miltary = false;
-        this.smoke = false;
         this.selectedInsuranceType = selectedInsuranceType;
         this.selectedInsuranceName = selectedInsuranceName;
     }
 
-    // Getters and Setters
     public String getId() {
         return id;
     }
@@ -235,14 +230,6 @@ public class Customer {
         this.drive = drive;
     }
 
-    public String getHobby() {
-        return hobby;
-    }
-
-    public void setHobby(String hobby) {
-        this.hobby = hobby;
-    }
-
     public String getIdentityNum() {
         return identityNum;
     }
@@ -259,14 +246,6 @@ public class Customer {
         this.miltary = miltary;
     }
 
-    public boolean isSmoke() {
-        return smoke;
-    }
-
-    public void setSmoke(boolean smoke) {
-        this.smoke = smoke;
-    }
-    
     public String getSelectedInsuranceType() {
         return selectedInsuranceType;
     }
@@ -285,9 +264,9 @@ public class Customer {
 
     @Override
     public String toString() {
-        return customerNumber + "," + id + "," + password + "," + name + "," + age + "," + gender + "," + address + "," +
-               phoneNumber + "," + job + "," + email + "," + birthdate + "," + creditRating + "," + abroad + "," +
-               constractStatus + "," + crime + "," + disease + "," + drink + "," + drive + "," + hobby + "," +
-               identityNum + "," + miltary + "," + smoke + "," + selectedInsuranceType + "," + selectedInsuranceName;
+        return customerNumber + "," + id + "," + password + "," + name + "," + age + "," + gender + "," + address + ","
+                + phoneNumber + "," + job + "," + email + "," + birthdate + "," + creditRating + "," + abroad + ","
+                + constractStatus + "," + crime + "," + disease + "," + (drink ? "유" : "무") + "," + drive + "," + identityNum + ","
+                + (miltary ? "유" : "무") + "," + selectedInsuranceType + "," + selectedInsuranceName;
     }
 }

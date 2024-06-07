@@ -16,7 +16,7 @@ public class ConstractListImpl implements ConstractList {
     }
 
     @Override
-    public void applyForInsurance(Customer customer, String insuranceType) throws IOException {
+    public void applyForInsurance(Customer customer, String insuranceType, String insuranceName) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         try {
@@ -35,7 +35,6 @@ public class ConstractListImpl implements ConstractList {
                 case "생명보험":
                     customer.setDisease(getSimpleValidatedInput(reader, "질병 (예: 고혈압): "));
                     customer.setDrink(getSimpleValidatedInput(reader, "음주 여부 (유/무): ", "^(유|무)$").equals("유"));
-                    customer.setSmoke(getSimpleValidatedInput(reader, "흡연 여부 (유/무): ", "^(유|무)$").equals("유"));
                     break;
 
                 case "손해보험":
@@ -46,7 +45,6 @@ public class ConstractListImpl implements ConstractList {
                 case "제3보험":
                     customer.setAbroad(getSimpleValidatedInput(reader, "해외 체류 여부 (유/무): ", "^(유|무)$"));
                     customer.setMiltary(getSimpleValidatedInput(reader, "군 복무 여부 (유/무): ", "^(유|무)$").equals("유"));
-                    customer.setHobby(getSimpleValidatedInput(reader, "취미 (예: 등산): "));
                     break;
 
                 default:
@@ -55,8 +53,10 @@ public class ConstractListImpl implements ConstractList {
             }
 
             customer.setCustomerNumber(customerService.getNextCustomerNumber());
+            customer.setSelectedInsuranceType(insuranceType);
+            customer.setSelectedInsuranceName(insuranceName);
 
-            saveCustomerToPendingApproval(customer, insuranceType);
+            saveCustomerToPendingApproval(customer);
 
             System.out.println("보험 가입 신청이 완료되었습니다. 인수 심사 후에 처리됩니다.");
         } catch (Exception e) {
@@ -90,11 +90,9 @@ public class ConstractListImpl implements ConstractList {
         }
     }
 
-    private void saveCustomerToPendingApproval(Customer customer, String insuranceType) {
-        String customerInfo = customer.toString() + "," + insuranceType;
-
+    private void saveCustomerToPendingApproval(Customer customer) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("인수심사대기자.txt", true))) {
-            writer.write(customerInfo);
+            writer.write(customer.toString());
             writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -104,6 +102,27 @@ public class ConstractListImpl implements ConstractList {
     private void pauseAndReturnToMain(BufferedReader reader) throws IOException {
         System.out.println("아무 키나 눌러 초기화면으로 돌아갑니다.");
         reader.readLine();
+    }
+
+    private List<String[]> getInsuranceList(String fileName) {
+        List<String[]> insuranceList = new ArrayList<>();
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = fileReader.readLine()) != null) {
+                String[] insuranceDetails = new String[7];
+                insuranceDetails[0] = line;
+                insuranceDetails[1] = fileReader.readLine();
+                insuranceDetails[2] = fileReader.readLine();
+                insuranceDetails[3] = fileReader.readLine();
+                insuranceDetails[4] = fileReader.readLine();
+                insuranceDetails[5] = fileReader.readLine();
+                insuranceDetails[6] = fileReader.readLine();
+                insuranceList.add(insuranceDetails);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return insuranceList;
     }
 
     @Override
@@ -145,7 +164,8 @@ public class ConstractListImpl implements ConstractList {
                 if (selectedInsurance == 0) {
                     showInsuranceList(fileName, reader);
                 } else if (selectedInsurance > 0 && selectedInsurance <= insuranceList.size()) {
-                    applyForInsurance(new Customer(), insuranceType);
+                    String selectedInsuranceName = insuranceList.get(selectedInsurance - 1)[0];
+                    applyForInsurance(new Customer(), insuranceType, selectedInsuranceName);
                     break;
                 } else {
                     System.out.println("\n잘못된 보험 종류를 선택하셨습니다.");
@@ -154,27 +174,6 @@ public class ConstractListImpl implements ConstractList {
                 System.out.println("\n올바르지 않은 입력입니다. 다시 입력해주세요.");
             }
         }
-    }
-
-    private List<String[]> getInsuranceList(String fileName) {
-        List<String[]> insuranceList = new ArrayList<>();
-        try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            while ((line = fileReader.readLine()) != null) {
-                String[] insuranceDetails = new String[7];
-                insuranceDetails[0] = line;
-                insuranceDetails[1] = fileReader.readLine();
-                insuranceDetails[2] = fileReader.readLine();
-                insuranceDetails[3] = fileReader.readLine();
-                insuranceDetails[4] = fileReader.readLine();
-                insuranceDetails[5] = fileReader.readLine();
-                insuranceDetails[6] = fileReader.readLine();
-                insuranceList.add(insuranceDetails);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return insuranceList;
     }
 
     private void showInsuranceList(String fileName, BufferedReader reader) throws IOException {
