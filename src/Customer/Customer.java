@@ -34,6 +34,8 @@ public class Customer {
     public Disease m_Disease;
     public Constract m_Constract;
     public Military m_Military;
+    private String selectedInsuranceType;
+    private String selectedInsuranceName;
 
     public Customer() {
         this.id = "idNA";
@@ -58,10 +60,11 @@ public class Customer {
         this.identityNum = "N/A";
         this.miltary = false;
         this.smoke = false;
+        this.selectedInsuranceType = "N/A";
+        this.selectedInsuranceName = "N/A";
     }
-
-    public Customer(String id, String password, int customerNumber, String name, int age, String gender, String address, String phoneNumber, String job, String email, String birthdate) {
-        this.id = id;
+    public Customer(String id, String password, int customerNumber, String name, int age, String gender, String address, String phoneNumber, String job, String email, String birthdate, String selectedInsuranceType, String selectedInsuranceName) {
+    	this.id = id;
         this.password = password;
         this.customerNumber = customerNumber;
         this.name = name;
@@ -83,6 +86,8 @@ public class Customer {
         this.identityNum = "N/A";
         this.miltary = false;
         this.smoke = false;
+        this.selectedInsuranceType = selectedInsuranceType;
+        this.selectedInsuranceName = selectedInsuranceName;
     }
 
     // Getters and Setters
@@ -261,10 +266,28 @@ public class Customer {
     public void setSmoke(boolean smoke) {
         this.smoke = smoke;
     }
+    
+    public String getSelectedInsuranceType() {
+        return selectedInsuranceType;
+    }
 
-    // toString 메소드
+    public void setSelectedInsuranceType(String selectedInsuranceType) {
+        this.selectedInsuranceType = selectedInsuranceType;
+    }
+
+    public String getSelectedInsuranceName() {
+        return selectedInsuranceName;
+    }
+
+    public void setSelectedInsuranceName(String selectedInsuranceName) {
+        this.selectedInsuranceName = selectedInsuranceName;
+    }
+
     @Override
     public String toString() {
-        return customerNumber + "," + id + "," + password + "," + name + "," + age + "," + gender + "," + address + "," + phoneNumber + "," + job + "," + email + "," + birthdate + "," + creditRating + "," + abroad + "," + constractStatus + "," + crime + "," + disease + "," + drink + "," + drive + "," + hobby + "," + identityNum + "," + miltary + "," + smoke;
+        return customerNumber + "," + id + "," + password + "," + name + "," + age + "," + gender + "," + address + "," +
+               phoneNumber + "," + job + "," + email + "," + birthdate + "," + creditRating + "," + abroad + "," +
+               constractStatus + "," + crime + "," + disease + "," + drink + "," + drive + "," + hobby + "," +
+               identityNum + "," + miltary + "," + smoke + "," + selectedInsuranceType + "," + selectedInsuranceName;
     }
 }

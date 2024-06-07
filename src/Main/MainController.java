@@ -10,6 +10,7 @@ import Service.InsuranceService;
 import Service.MarketingService;
 import Service.MenuService;
 import Service.ProductDevelopmentService;
+import Service.UnderwritingService;
 
 public class MainController {
     private BufferedReader reader;
@@ -19,6 +20,7 @@ public class MainController {
     private MarketingService marketingService;
     private MenuService menuService;
     private CustomerService customerService;
+    private UnderwritingService underwritingService;
 
     public MainController() {
         reader = new BufferedReader(new InputStreamReader(System.in));
@@ -27,6 +29,7 @@ public class MainController {
         customerSupportService = new CustomerSupportService();
         productDevelopmentService = new ProductDevelopmentService();
         marketingService = new MarketingService();
+        underwritingService = new UnderwritingService();
         menuService = new MenuService();
     }
 
@@ -61,7 +64,7 @@ public class MainController {
                         insuranceService.requestUnderwrite(reader);
                         break;
                     case "9":
-                        insuranceService.underwrite(reader);
+                    	underwritingService.showUnderwritingMenu(reader);
                         break;
                     case "10":
                         insuranceService.reviewCoverage(reader);
