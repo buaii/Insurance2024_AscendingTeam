@@ -7,7 +7,7 @@ public class MenuService {
         System.out.println("1. 고객 로그인");
         System.out.println("2. 직원 로그인");
         System.out.println("3. 보험 가입");
-        System.out.println("x. 이전 메뉴");
+        System.out.println("x. 종료");
         System.out.println("---------------------------------");
         System.out.print("\n원하는 서비스를 선택하세요 : ");
     }
