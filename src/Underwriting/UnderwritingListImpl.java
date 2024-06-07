@@ -25,7 +25,7 @@ public class UnderwritingListImpl implements UnderwritingList {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length != 22) { // Expecting 22 fields
+                if (parts.length != 22) {
                     continue;
                 }
                 Customer customer = new Customer(
@@ -40,8 +40,8 @@ public class UnderwritingListImpl implements UnderwritingList {
                     parts[8].trim(),
                     parts[9].trim(),
                     parts[10].trim(),
-                    parts[20].trim(), // insuranceType
-                    parts[21].trim()  // insuranceName
+                    parts[20].trim(), 
+                    parts[21].trim() 
                 );
                 customer.setCreditRating(parts[11].trim());
                 customer.setAbroad(parts[12].trim());
