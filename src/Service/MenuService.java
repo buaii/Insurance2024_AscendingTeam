@@ -14,8 +14,9 @@ public class MenuService {
 
     public void showCustomerMenu() {
         System.out.println("\n----------고객 메뉴----------");
-        System.out.println("1. 긴급 출동 요청");
-        System.out.println("2. 고객 지원");
+        System.out.println("1. 보험금 청구 요청 (사고 접수)");
+        System.out.println("2. 긴급 출동 요청");
+        System.out.println("3. 고객 지원");
         System.out.println("x. 이전 메뉴");
         System.out.println("---------------------------------");
         System.out.print("\n원하는 서비스를 선택하세요 : ");
