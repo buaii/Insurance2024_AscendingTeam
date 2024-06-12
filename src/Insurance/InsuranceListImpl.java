@@ -15,17 +15,30 @@ public class InsuranceListImpl implements InsuranceList {
     }
 
     public ArrayList<Insurance> loadInsurance(String fileName) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(fileName));
-        ArrayList<Insurance> insuranceList = new ArrayList<>();
+    	ArrayList<Insurance> insuranceList = new ArrayList<>();
         StringBuilder insInfo = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            if (!line.trim().isEmpty()) {
-                insInfo.append(line).append("\n");
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (!line.trim().isEmpty()) {
+                    insInfo.append(line).append("\n");
+                } else {
+                    // 빈 줄을 만나면 보험 항목을 리스트에 추가
+                    if (insInfo.length() > 0) {
+                        insuranceList.add(new Insurance(insInfo.toString().trim()));
+                        insInfo.setLength(0); // StringBuilder 초기화
+                    }
+                }
             }
+            // 마지막 항목 추가
+            if (insInfo.length() > 0) {
+                insuranceList.add(new Insurance(insInfo.toString().trim()));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        insuranceList.add(new Insurance(insInfo.toString()));
-        reader.close();
+
         return insuranceList;
     }
 

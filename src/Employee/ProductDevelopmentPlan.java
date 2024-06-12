@@ -11,10 +11,13 @@ import EmployeeValue.MarketResearchingInfo;
  */
 public class ProductDevelopmentPlan {
 
-	private String calculationInfo;
-	private String insuranceConceptInfo;
-	private String marketInfo;
 	private String name;
+	private String description;
+	private String premium;
+	private String coverage;
+	private String term;
+	private String maxAge;
+	private String exclusion;
 	private String type;
 	public InsuranceConceptInfo m_InsuranceConceptInfo;
 	public MarketResearchingInfo m_MarketResearchingInfo;
@@ -41,29 +44,7 @@ public class ProductDevelopmentPlan {
 
 	}
 
-	public String getCalculationInfo() {
-		return calculationInfo;
-	}
 
-	public void setCalculationInfo(String calculationInfo) {
-		this.calculationInfo = calculationInfo;
-	}
-
-	public String getInsuranceConceptInfo() {
-		return insuranceConceptInfo;
-	}
-
-	public void setInsuranceConceptInfo(String insuranceConceptInfo) {
-		this.insuranceConceptInfo = insuranceConceptInfo;
-	}
-
-	public String getMarketInfo() {
-		return marketInfo;
-	}
-
-	public void setMarketInfo(String marketInfo) {
-		this.marketInfo = marketInfo;
-	}
 
 	public String getName() {
 		return name;
@@ -79,6 +60,54 @@ public class ProductDevelopmentPlan {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getPremium() {
+		return premium;
+	}
+
+	public void setPremium(String premium) {
+		this.premium = premium;
+	}
+
+	public String getCoverage() {
+		return coverage;
+	}
+
+	public void setCoverage(String coverage) {
+		this.coverage = coverage;
+	}
+
+	public String getTerm() {
+		return term;
+	}
+
+	public void setTerm(String term) {
+		this.term = term;
+	}
+
+	public String getMaxAge() {
+		return maxAge;
+	}
+
+	public void setMaxAge(String maxAge) {
+		this.maxAge = maxAge;
+	}
+
+	public String getExclusion() {
+		return exclusion;
+	}
+
+	public void setExclusion(String exclusion) {
+		this.exclusion = exclusion;
 	}
 
 }
