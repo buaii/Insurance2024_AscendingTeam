@@ -1,6 +1,7 @@
 package InsuranceValue;
 
 import java.awt.Image;
+import java.nio.file.Path;
 
 /**
  * @author eun94
@@ -16,6 +17,7 @@ public class AccidentInfo {
 	private String nameOfHospital;
 	private Image scenePhoto;
 	private String type;
+	private Path photoPath;
 
 	public AccidentInfo(){
 
@@ -79,6 +81,14 @@ public class AccidentInfo {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public Path getPhotoPath() {
+		return photoPath;
+	}
+
+	public void setPhotoPath(Path photoPath) {
+		this.photoPath = photoPath;
 	}
 
 }

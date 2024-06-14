@@ -1,6 +1,6 @@
 package InsuranceValue;
 
-import Customer.Member;
+import Customer.Customer;
 
 /**
  * @author eun94
@@ -14,7 +14,7 @@ public class RequestInsureInfo {
 	private String bill;
 	private String memberInfo;
 	public AccidentInfo m_AccidentInfo;
-	public Member m_Member;
+	public Customer m_Customer;
 
 	public RequestInsureInfo(){
 

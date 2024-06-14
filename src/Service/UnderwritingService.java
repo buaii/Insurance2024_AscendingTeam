@@ -108,7 +108,7 @@ public class UnderwritingService {
         }
     }
 
-    private Customer findCustomer(String id, String password) throws IOException {
+    public Customer findCustomer(String id, String password) throws IOException {
         List<Customer> allCustomers = new ArrayList<>();
         allCustomers.addAll(loadCustomersFromFile("고객명단.txt"));
         allCustomers.addAll(loadCustomersFromFile("거절고객.txt"));
