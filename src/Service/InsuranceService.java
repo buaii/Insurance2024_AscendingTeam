@@ -20,6 +20,7 @@ import Insurance.Insurance;
 import Insurance.InsuranceListImpl;
 import InsuranceValue.AccidentInfo;
 import InsuranceValue.RequestInsureInfo;
+import InsuranceValue.RequestListImpl;
 
 
 public class InsuranceService {
@@ -166,8 +167,10 @@ public class InsuranceService {
     	AccidentInfo accInfo = new AccidentInfo();
     	ArrayList<String> inputs = new ArrayList<>();
     	
+    	reqInfo.m_Customer = customer;
+    	
     	System.out.println("[ 보험 계약자 정보를 입력하세요 ]");
-    	String memInfoString = "이름: ";
+    	String memInfoString = id + "\n" + pw + "\n";
     	
     	System.out.print("이름: ");
     	String name = reader.readLine();
@@ -176,18 +179,18 @@ public class InsuranceService {
     	
     	System.out.print("주민등록번호: ");
     	String ssn = reader.readLine().trim();
-    	memInfoString += "주민등록번호: " + ssn + "\n";
+    	memInfoString += ssn + "\n";
     	inputs.add(ssn);
     	
     	System.out.print("휴대폰 번호: ");
     	String phoneNum = reader.readLine();
-    	memInfoString += "휴대폰 번호: " + phoneNum + "\n";
+    	memInfoString += phoneNum + "\n";
     	inputs.add(phoneNum);
     	
     	reqInfo.setMemberInfo(memInfoString);
     	
     	System.out.println("\n[ 사고 정보를 입력하세요 ]");
-    	String accInfoString = "사고 유형: ";
+    	String accInfoString = "";
     	
     	System.out.print("사고 유형: ");
     	String accType = reader.readLine();
@@ -197,37 +200,36 @@ public class InsuranceService {
     	
     	System.out.print("청구 유형: ");
     	String billType = reader.readLine();
-    	accInfoString += "청구 유형: " + billType + "\n";
+    	accInfoString += billType + "\n";
     	accInfo.setBillType(billType);
     	inputs.add(billType);
     	
     	System.out.print("사고 날짜: ");
     	String date = reader.readLine();
-    	accInfoString += "사고 날짜: " + date + "\n";
+    	accInfoString += date + "\n";
     	accInfo.setDate(date);
     	inputs.add(date);
     	
     	System.out.print("사고 경위: ");
     	String accDetails = reader.readLine();
-    	accInfoString += "사고 경위: " + accDetails + "\n";
+    	accInfoString += accDetails + "\n";
     	accInfo.setDetails(accDetails);
     	inputs.add(accDetails);
     	
     	System.out.print("진단 병원명: ");
     	String hospital = reader.readLine();
-    	accInfoString += "진단 병원명: " + hospital + "\n";
+    	accInfoString += hospital + "\n";
     	accInfo.setNameOfHospital(hospital);
     	inputs.add(hospital);
     	
     	System.out.print("진단명: ");
     	String disease = reader.readLine();
-    	accInfoString += "진단명: " + disease + "\n";
+    	accInfoString += disease + "\n";
     	accInfo.setNameOfDisease(disease);
     	inputs.add(disease);
     	
     	System.out.print("사고 현장 사진 - 이미지 파일 경로: ");
     	String imagePathString = reader.readLine();
-    	// accInfoString += "사고 현장 사진 파일 경로: " + imagePathString + "\n";
     	File file = new File(imagePathString);
     	BufferedImage bufferedImage = ImageIO.read(file);
     	Image image = bufferedImage;
@@ -238,7 +240,7 @@ public class InsuranceService {
     	reqInfo.m_AccidentInfo = accInfo;
     	
     	System.out.println("\n[ 보험 수익자 정보를 입력하세요 ]");
-    	String beneInfoString = "이름: ";
+    	String beneInfoString = "";
     	
     	System.out.print("이름: ");
     	String beneName = reader.readLine();
@@ -247,12 +249,12 @@ public class InsuranceService {
     	
     	System.out.print("계좌 번호: ");
     	String account = reader.readLine(); 
-    	beneInfoString += "계좌 번호: " + account + "\n";
+    	beneInfoString += account + "\n";
     	inputs.add(account);
     	
     	System.out.print("휴대폰 번호: ");
     	String benePhoneNum = reader.readLine();
-    	beneInfoString += "휴대폰 번호: " +benePhoneNum + "\n";
+    	beneInfoString += benePhoneNum;
     	reqInfo.setBeneficiaryInfo(beneInfoString);
     	inputs.add(benePhoneNum);
     	
@@ -274,10 +276,13 @@ public class InsuranceService {
     	
     	System.out.println("----------- 청구 정보 -----------\n");
     	System.out.println("[ 보험 계약자 정보 ]");
-    	System.out.println(reqInfo.getMemberInfo());
+    	String[] tokens = reqInfo.getMemberInfo().split("\n");
+    	printMemberInfo(tokens);
     	
     	System.out.println("[ 사고 정보 ]");
-    	System.out.println(reqInfo.getAccidentInfo());
+    	tokens = reqInfo.getAccidentInfo().split("\n");
+    	printAccInfo(tokens);
+    	
     	System.out.print("고객이 제출한 사고 현장 사진을 저장할 폴더 경로를 입력하세요: ");
     	String targetFolderPathString = reader.readLine();
     	Path targetFolderPath = Paths.get(targetFolderPathString);
@@ -286,9 +291,12 @@ public class InsuranceService {
     	Path targetPath = targetFolderPath.resolve(fileName);
     	Files.copy(imagePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
     	System.out.println("파일이 성공적으로 저장되었습니다.\n");
+    	accInfo.setPhotoPath(targetPath);
+    	reqInfo.m_AccidentInfo = accInfo;
     	
     	System.out.println("[ 보험 수익자 정보 ]");
-    	System.out.println(reqInfo.getBeneficiaryInfo());
+    	tokens = reqInfo.getBeneficiaryInfo().split("\n");
+    	printBeneInfo(tokens);
     	
     	System.out.println("Enter를 눌러 보험 약관을 확인하십시오.");
     	
@@ -305,6 +313,8 @@ public class InsuranceService {
     	    choice = reader.readLine().trim();
     	    if (choice.equals("1")) {
     		    System.out.println("사고 접수가 승인되었습니다. 보험금 지급 심사가 요청되었습니다. 고객에게 결과를 알립니다.");
+    		    RequestListImpl requestList = new RequestListImpl("coverageRequests.txt");
+    		    requestList.add("coverageRequests.txt", reqInfo);
     		    System.out.println("\n------------------------------------\n");
     		    System.out.println("[알림] 보험 회사로부터 사고 접수가 승인되었습니다.");
     		    System.out.println("보험금 지급 심사가 진행 중에 있습니다.");
@@ -332,7 +342,9 @@ public class InsuranceService {
     }
 
     public void reviewCoverage(BufferedReader reader) {
-        // 구현
+        // 6. 보상 검토
+    	// Use case 사고 서류를 심사한다 - Scenario '보험금 지급 심사' 메뉴를 클릭한다
+    	System.out.println("\n보험금 지급 심사를 선택하셨습니다.");
     }
 
     public void approvePayment(BufferedReader reader) {
@@ -366,5 +378,34 @@ public class InsuranceService {
     		System.out.println(line);
     	}
     	reader.close();
+    }
+    
+    public void printMemberInfo(String[] tokens) {
+    	int i = 0;
+    	System.out.println("ID: " + tokens[i++]);
+    	System.out.println("PW: " + tokens[i++]);
+    	System.out.println("이름: " + tokens[i++]);
+    	System.out.println("주민등록번호: " + tokens[i++]);
+    	System.out.println("휴대폰 번호: " +  tokens[i++]);
+    	System.out.println();
+    }
+    
+    public void printAccInfo(String[] tokens) {
+    	int i = 0;
+    	System.out.println("사고 유형: " + tokens[i++]);
+    	System.out.println("청구 유형: " + tokens[i++]);
+    	System.out.println("사고 날짜: " + tokens[i++]);
+    	System.out.println("사고 경위: " + tokens[i++]);
+    	System.out.println("진단 병원명: " + tokens[i++]);
+    	System.out.println("진단명: " + tokens[i++]);
+    	System.out.println();
+    }
+    
+    public void printBeneInfo(String[] tokens) {
+    	int i = 0;
+    	System.out.println("이름: " + tokens[i++]);
+    	System.out.println("계좌 번호: " + tokens[i++]);
+    	System.out.println("휴대폰 번호: " + tokens[i++]);
+    	System.out.println();
     }
 }
