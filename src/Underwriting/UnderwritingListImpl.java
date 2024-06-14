@@ -41,7 +41,8 @@ public class UnderwritingListImpl implements UnderwritingList {
                     parts[9].trim(),
                     parts[10].trim(),
                     parts[20].trim(), 
-                    parts[21].trim() 
+                    parts[21].trim(),
+                    parts[22].trim()
                 );
                 customer.setCreditRating(parts[11].trim());
                 customer.setAbroad(parts[12].trim());

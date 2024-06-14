@@ -11,7 +11,7 @@ public class Insurance {
     private String term;
     private String maxAge;
     private String exclusions;
-
+    
     public Insurance(String inputString) {
         StringTokenizer tokenizer = new StringTokenizer(inputString, "\n");
         this.name = tokenizer.nextToken().trim();

@@ -2,15 +2,15 @@ package Constract;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 
 import Customer.Customer;
+import Insurance.Insurance;
 import Service.CustomerService;
 
 public class ConstractListImpl implements ConstractList {
 
     private CustomerService customerService;
-
+    
     public ConstractListImpl(CustomerService customerService) {
         this.customerService = customerService;
     }
@@ -30,7 +30,7 @@ public class ConstractListImpl implements ConstractList {
             customer.setJob(getSimpleValidatedInput(reader, "직업 (예: 회사원): "));
             customer.setEmail(getSimpleValidatedInput(reader, "이메일 주소 (예: user@example.com): ", "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$"));
             customer.setBirthdate(getSimpleValidatedInput(reader, "생일 (예: YYYY-MM-DD): ", "^(19|20)\\d{2}-\\d{2}-\\d{2}$"));
-
+            customer.setAccount(getSimpleValidatedInput(reader, "계좌 (예: 000-0000-0000-00): ", "^(\\d{3}-\\d{4}-\\d{4}-\\d{2})$"));
             switch (insuranceType) {
                 case "생명보험":
                     customer.setDisease(getSimpleValidatedInput(reader, "질병 (예: 고혈압): "));
@@ -57,6 +57,7 @@ public class ConstractListImpl implements ConstractList {
             customer.setSelectedInsuranceName(insuranceName);
 
             saveCustomerToPendingApproval(customer);
+            
 
             System.out.println("보험 가입 신청이 완료되었습니다. 인수 심사 후에 처리됩니다.");
         } catch (Exception e) {
@@ -104,24 +105,31 @@ public class ConstractListImpl implements ConstractList {
         reader.readLine();
     }
 
-    private List<String[]> getInsuranceList(String fileName) {
-        List<String[]> insuranceList = new ArrayList<>();
-        try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName))) {
+    private ArrayList<Insurance> getInsuranceList(String fileName) {
+    	ArrayList<Insurance> insuranceList = new ArrayList<>();
+        StringBuilder insInfo = new StringBuilder();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
-            while ((line = fileReader.readLine()) != null) {
-                String[] insuranceDetails = new String[7];
-                insuranceDetails[0] = line;
-                insuranceDetails[1] = fileReader.readLine();
-                insuranceDetails[2] = fileReader.readLine();
-                insuranceDetails[3] = fileReader.readLine();
-                insuranceDetails[4] = fileReader.readLine();
-                insuranceDetails[5] = fileReader.readLine();
-                insuranceDetails[6] = fileReader.readLine();
-                insuranceList.add(insuranceDetails);
+            while ((line = reader.readLine()) != null) {
+                if (!line.trim().isEmpty()) {
+                    insInfo.append(line).append("\n");
+                } else {
+                    // 빈 줄을 만나면 보험 항목을 리스트에 추가
+                    if (insInfo.length() > 0) {
+                        insuranceList.add(new Insurance(insInfo.toString().trim()));
+                        insInfo.setLength(0); // StringBuilder 초기화
+                    }
+                }
+            }
+            // 마지막 항목 추가
+            if (insInfo.length() > 0) {
+                insuranceList.add(new Insurance(insInfo.toString().trim()));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return insuranceList;
     }
 
@@ -147,13 +155,13 @@ public class ConstractListImpl implements ConstractList {
                 this.selectInsuranceTypeAndApply(reader);
         }
 
-        List<String[]> insuranceList = getInsuranceList(fileName);
+        ArrayList<Insurance> insuranceList = getInsuranceList(fileName);
 
         while (true) {
             System.out.println("\n선택한 보험의 목록:");
             System.out.println("0. 상품 정보 요청");
             for (int i = 0; i < insuranceList.size(); i++) {
-                System.out.println((i + 1) + ". " + insuranceList.get(i)[0] + " / " + insuranceList.get(i)[1]);
+                System.out.println((i + 1) + ". [" + insuranceList.get(i).getName() + "] / " + insuranceList.get(i).getDescription());
             }
 
             System.out.print("\n가입하실 보험을 입력하세요: ");
@@ -164,7 +172,7 @@ public class ConstractListImpl implements ConstractList {
                 if (selectedInsurance == 0) {
                     showInsuranceList(fileName, reader);
                 } else if (selectedInsurance > 0 && selectedInsurance <= insuranceList.size()) {
-                    String selectedInsuranceName = insuranceList.get(selectedInsurance - 1)[0];
+                    String selectedInsuranceName = insuranceList.get(selectedInsurance - 1).getName();
                     applyForInsurance(new Customer(), insuranceType, selectedInsuranceName);
                     break;
                 } else {
@@ -177,11 +185,11 @@ public class ConstractListImpl implements ConstractList {
     }
 
     private void showInsuranceList(String fileName, BufferedReader reader) throws IOException {
-        List<String[]> insuranceList = getInsuranceList(fileName);
+    	ArrayList<Insurance> insuranceList = getInsuranceList(fileName);
 
         System.out.println("\n------------상품 목록------------");
         for (int i = 0; i < insuranceList.size(); i++) {
-            System.out.println("\n" + (i + 1) + ". " + insuranceList.get(i)[0]);
+            System.out.println("\n" + (i + 1) + ". [" + insuranceList.get(i).getName() + "]");
         }
 
         System.out.print("\n세부정보를 확인할 보험을 선택하세요 (예: 1): ");
@@ -190,20 +198,59 @@ public class ConstractListImpl implements ConstractList {
         try {
             selectedInsurance = Integer.parseInt(input);
             if (selectedInsurance > 0 && selectedInsurance <= insuranceList.size()) {
-                String[] details = insuranceList.get(selectedInsurance - 1);
-                System.out.println("\n[" + details[0] + "]의 세부 정보는 다음과 같습니다:");
-                System.out.println("설명: " + details[1]);
-                System.out.println("보험료: " + details[2]);
-                System.out.println("보상 한도: " + details[3]);
-                System.out.println("기간: " + details[4]);
-                System.out.println("최대 나이: " + details[5]);
-                System.out.println("제외 사항: " + details[6]);
+                System.out.println("\n[" + insuranceList.get(selectedInsurance - 1).getName() + "]의 세부 정보는 다음과 같습니다:");
+                System.out.println("설명: " + insuranceList.get(selectedInsurance - 1).getDescription());
+                System.out.println("보험료: " + insuranceList.get(selectedInsurance - 1).getPremium());
+                System.out.println("보상 한도: " + insuranceList.get(selectedInsurance - 1).getCoverage());
+                System.out.println("기간: " + insuranceList.get(selectedInsurance - 1).getTerm());
+                System.out.println("최대 나이: " + insuranceList.get(selectedInsurance - 1).getMaxAge());
+                System.out.println("제외 사항: " + insuranceList.get(selectedInsurance - 1).getExclusions());
             } else {
                 System.out.println("\n잘못된 보험 종류를 선택하셨습니다.");
             }
         } catch (NumberFormatException e) {
             System.out.println("\n올바르지 않은 입력입니다. 다시 입력해주세요.");
         }
+    }
+    
+    
+	public ArrayList<Customer> loadCustomer(String fileName) throws IOException {
+        ArrayList<Customer> customers = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 22) { 
+                    Customer customer = new Customer(
+                        parts[1].trim(),
+                        parts[2].trim(),
+                        Integer.parseInt(parts[0].trim()),
+                        parts[3].trim(),
+                        Integer.parseInt(parts[4].trim()),
+                        parts[5].trim(),
+                        parts[6].trim(),
+                        parts[7].trim(),
+                        parts[8].trim(),
+                        parts[9].trim(),
+                        parts[10].trim(),
+                        parts[20].trim(),
+                        parts[21].trim(),
+                        parts[22].trim()
+                    );
+                    customer.setCreditRating(parts[11].trim());
+                    customer.setAbroad(parts[12].trim());
+                    customer.setConstractStatus(parts[13].trim());
+                    customer.setCrime(parts[14].trim());
+                    customer.setDisease(parts[15].trim());
+                    customer.setDrink(parts[16].trim().equalsIgnoreCase("유"));
+                    customer.setDrive(parts[17].trim());
+                    customer.setIdentityNum(parts[18].trim());
+                    customer.setMiltary(parts[19].trim().equalsIgnoreCase("유"));
+                    customers.add(customer);
+                }
+            }
+        }
+        return customers;
     }
 
     @Override
@@ -230,7 +277,7 @@ public class ConstractListImpl implements ConstractList {
 
     @Override
     public void get() {
-        // TODO Auto-generated method stub
+        
     }
 
     @Override

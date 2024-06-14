@@ -142,7 +142,8 @@ public class UnderwritingService {
                         parts[9].trim(),
                         parts[10].trim(),
                         parts[20].trim(),
-                        parts[21].trim()
+                        parts[21].trim(),
+                        parts[22].trim()
                     );
                     customer.setCreditRating(parts[11].trim());
                     customer.setAbroad(parts[12].trim());
@@ -157,7 +158,7 @@ public class UnderwritingService {
                 }
             }
         }
-        return customers;
+        return customers;  
     }
 
     private boolean isCustomerInFile(Customer customer, String filePath) throws IOException {

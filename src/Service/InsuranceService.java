@@ -1,11 +1,14 @@
 package Service;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import Insurance.Insurance;
 import Insurance.InsuranceListImpl;
 import Constract.ConstractListImpl;
+import Customer.Customer;
 
 public class InsuranceService {
 
@@ -144,12 +147,132 @@ public class InsuranceService {
         // 구현
     }
 
-    public void approvePayment(BufferedReader reader) {
-        // 구현
+    public void approvePayment(BufferedReader reader) throws IOException {
+    	ArrayList<Customer> customerList2 = constractList.loadCustomer("보험금지급승인요청목록.txt");
+    	String choice;
+    	
+    	System.out.println("\n------------보험금 지급 승인 메뉴------------");
+    	for (int i = 0; i < customerList2.size(); ++i) {
+            System.out.println((i + 1) + ". " + customerList2.get(i).getName() + " / " + customerList2.get(i).getId());
+        }
+    	System.out.println("\n승인 대상을 선택하세요:");
+    	choice = reader.readLine().trim();
+    	
+    	Customer customer2 = customerList2.get(Integer.parseInt(choice)-1);
+    	try (BufferedWriter writer = new BufferedWriter(new FileWriter("보험금지급대기목록.txt", true))) {
+    		writer.write(customer2.toString());
+            writer.newLine();
+            
+            System.out.println("보험금 지급 승인이 완료되었습니다.");
+            customerList2.remove(Integer.parseInt(choice) - 1);
+            if (customerList2.isEmpty()) {
+            	try (BufferedWriter writer2 = new BufferedWriter(new FileWriter("보험금지급승인요청목록.txt"))) {
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+            } else {
+            	for (Customer cus : customerList2) {
+            		try (BufferedWriter writer2 = new BufferedWriter(new FileWriter("보험금지급승인요청목록.txt"))) {
+    	                writer2.write(cus.toString());
+    	                writer2.newLine();
+    	            } catch (IOException e) {
+    	                e.printStackTrace();
+    	            }
+            	}
+            }
+        	
+        } catch (IOException e) {
+        	System.out.println("서류를 불러오는데 실패했씁니다.");
+            e.printStackTrace();
+        }
     }
 
-    public void insurancePayment(BufferedReader reader) {
-        // 구현
+    public void insurancePayment(BufferedReader reader) throws IOException {
+    	System.out.println("\n------------보험금 지급 메뉴------------");
+        System.out.println("1. 보험금 지급 승인 요청");
+        System.out.println("2. 보험금 지급");
+        System.out.println("\n원하는 서비스를 선택하세요:");
+        String choice = reader.readLine().trim();
+        
+        
+        switch (choice) {
+	        case "1":
+	        	ArrayList<Customer> customerList = constractList.loadCustomer("고객명단.txt");
+	        	System.out.println("\n------------보험금 지급 승인 요청 메뉴------------");
+	        	for (int i = 0; i < customerList.size(); ++i) {
+	                System.out.println((i + 1) + ". " + customerList.get(i).getName() + " / " + customerList.get(i).getId());
+	            }
+	        	System.out.println("\n승인 요청 대상을 선택하세요:");
+	        	choice = reader.readLine().trim();
+	        	
+	        	Customer customer = customerList.get(Integer.parseInt(choice)-1);
+	            try (BufferedWriter writer = new BufferedWriter(new FileWriter("보험금지급승인요청목록.txt", true))) {
+	                writer.write(customer.toString());
+	                writer.newLine();
+	                System.out.println("보험금 지급 승인 요청이 완료되었습니다.");
+	            } catch (IOException e) {
+	            	System.out.println("화면 로드에 실패했습니다. 다시 시도해 주세요.");
+	                e.printStackTrace();
+	            }
+	            break;
+	        case "2":
+	        	ArrayList<Customer> customerList3 = constractList.loadCustomer("보험금지급대기목록.txt");
+	        	System.out.println("\n------------보험금 지급 메뉴------------");
+	        	for (int i = 0; i < customerList3.size(); ++i) {
+	                System.out.println((i + 1) + ". " + customerList3.get(i).getName() + " / " + customerList3.get(i).getId());
+	            }
+	        	System.out.println("\n지급 대상을 선택하세요:");
+	        	choice = reader.readLine().trim();
+	        	
+	        	Customer customer3 = customerList3.get(Integer.parseInt(choice)-1);
+	        	
+	        	ArrayList<Insurance> inslist;
+	        	switch (customer3.getSelectedInsuranceType()) {
+		            case "생명보험":
+		            	inslist = insuranceList.loadInsurance("Data/Life.txt");
+		                break;
+		            case "손해보험":
+		            	inslist = insuranceList.loadInsurance("Data/property.txt");
+		                break;
+		            case "제3보험":
+		            	inslist = insuranceList.loadInsurance("Data/thirdParty.txt");
+		                break;
+		            default:
+		                System.out.println("\n올바르지 않은 값입니다. 다시 입력해주세요. \n");
+		                this.showInsuranceInfo(reader, null);
+		                return;
+	        	}
+	        	ArrayList<Insurance> insList2 = new ArrayList<Insurance>();
+	        	for (int i = 0; i < inslist.size(); ++i) {
+	                if (customer3.getSelectedInsuranceName().equals(inslist.get(i).getName())) {
+	                	insList2.add(inslist.get(i));
+	                }
+	            }
+	        	
+	        	System.out.println(customer3.getName()+"님의 "+customer3.getAccount()+" 계좌로 "+insList2.get(0).getCoverage()+" 보험금이 지급되었습니다.");
+	        	System.out.println("보험금 지급 절차가 완료되었습니다.");
+	        	
+	        	customerList3.remove(Integer.parseInt(choice) - 1);
+	            if (customerList3.isEmpty()) {
+	            	try (BufferedWriter writer2 = new BufferedWriter(new FileWriter("보험금지급대기목록.txt"))) {
+		            } catch (IOException e) {
+		                e.printStackTrace();
+		            }
+	            } else {
+	            	for (Customer cus : customerList3) {
+	            		try (BufferedWriter writer2 = new BufferedWriter(new FileWriter("보험금지급대기목록.txt"))) {
+	    	                writer2.write(cus.toString());
+	    	                writer2.newLine();
+	    	            } catch (IOException e) {
+	    	                e.printStackTrace();
+	    	            }
+	            	}
+	            }
+	        	
+	            break;            
+	        default:
+	            System.out.println("\n유효하지 않은 값입니다. 다시 입력해주세요.\n");
+        }
     }
 
     public void contractManage(BufferedReader reader) {

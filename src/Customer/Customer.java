@@ -10,6 +10,7 @@ public class Customer {
     private int customerNumber;
     private String name;
     private int age;
+    private String account;
     private String gender;
     private String address;
     private String phoneNumber;
@@ -41,6 +42,7 @@ public class Customer {
         this.customerNumber = 0;
         this.name = "N/A";
         this.age = 0;
+        this.account = "accountNA";
         this.gender = "N/A";
         this.address = "N/A";
         this.phoneNumber = "N/A";
@@ -61,30 +63,31 @@ public class Customer {
     }
 
     public Customer(String id, String password, int customerNumber, String name, int age, String gender, String address, 
-                    String phoneNumber, String job, String email, String birthdate, String selectedInsuranceType, String selectedInsuranceName) {
-        this.id = id;
-        this.password = password;
-        this.customerNumber = customerNumber;
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.job = job;
-        this.email = email;
-        this.birthdate = birthdate;
-        this.creditRating = "creditNA"; 
-        this.abroad = "N/A";
-        this.constractStatus = "N/A";
-        this.crime = "N/A";
-        this.disease = "N/A";
-        this.drink = false;
-        this.drive = "N/A";
-        this.identityNum = "N/A";
-        this.miltary = false;
-        this.selectedInsuranceType = selectedInsuranceType;
-        this.selectedInsuranceName = selectedInsuranceName;
-    }
+            String phoneNumber, String job, String email, String birthdate, String selectedInsuranceType, String selectedInsuranceName, String account) {
+		this.id = id;
+		this.password = password;
+		this.customerNumber = customerNumber;
+		this.name = name;
+		this.age = age;
+		this.gender = gender;
+		this.address = address;
+		this.phoneNumber = phoneNumber;
+		this.job = job;
+		this.email = email;
+		this.birthdate = birthdate;
+		this.creditRating = "creditNA"; 
+		this.abroad = "N/A";
+		this.constractStatus = "N/A";
+		this.crime = "N/A";
+		this.disease = "N/A";
+		this.drink = false;
+		this.drive = "N/A";
+		this.identityNum = "N/A";
+		this.miltary = false;
+		this.selectedInsuranceType = selectedInsuranceType;
+		this.selectedInsuranceName = selectedInsuranceName;
+		this.account = account;
+	}
 
     public String getId() {
         return id;
@@ -267,6 +270,14 @@ public class Customer {
         return customerNumber + "," + id + "," + password + "," + name + "," + age + "," + gender + "," + address + ","
                 + phoneNumber + "," + job + "," + email + "," + birthdate + "," + creditRating + "," + abroad + ","
                 + constractStatus + "," + crime + "," + disease + "," + (drink ? "유" : "무") + "," + drive + "," + identityNum + ","
-                + (miltary ? "유" : "무") + "," + selectedInsuranceType + "," + selectedInsuranceName;
+                + (miltary ? "유" : "무") + "," + selectedInsuranceType + "," + selectedInsuranceName + "," + account;
     }
+
+	public String getAccount() {
+		return account;
+	}
+
+	public void setAccount(String account) {
+		this.account = account;
+	}
 }
