@@ -40,13 +40,14 @@ public class RequestListImpl implements RequestList {
     	writer.write(reqInfo.getMemberInfo());
     	writer.write(reqInfo.getAccidentInfo());
     	writer.write(reqInfo.getBeneficiaryInfo());
-    	writer.write("\n\n");
+    	writer.write("\n");
     	writer.close();
 	}
 
 	@Override
-	public void delete() {
-		// TODO Auto-generated method stub
+	public void delete(int index) throws IOException {
+		this.requestList.remove(index);
+		update("coverageRequests.txt");
 		
 	}
 
@@ -57,19 +58,26 @@ public class RequestListImpl implements RequestList {
 	}
 
 	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-		
+	public void update(String fileName) throws IOException {
+		FileWriter writer = new FileWriter(fileName, false);
+		for (int i=0; i<this.requestList.size(); ++i) {
+			writer.write(this.requestList.get(i).getMemberInfo());
+	    	writer.write(this.requestList.get(i).getAccidentInfo());
+	    	writer.write(this.requestList.get(i).getBeneficiaryInfo());
+	    	writer.write("\n");
+		}
+		writer.close();
 	}
 
 	@Override
 	public RequestInsureInfo loadList(String[] lineArray) throws IOException {
 		
-		// if (lineArray[0].equals(null)) return null;
-		
 		RequestInsureInfo request = new RequestInsureInfo();
 		String infoString = "";
 		int i = 0;
+		
+		infoString += lineArray[i] + "\n"; // id
+		infoString += lineArray[i+1] + "\n"; // pw
 		
 		UnderwritingService toGetFindCustomerMethod = new UnderwritingService();
     	Customer customer = toGetFindCustomerMethod.findCustomer(lineArray[i], lineArray[++i]);
@@ -108,6 +116,16 @@ public class RequestListImpl implements RequestList {
 		request.setBeneficiaryInfo(infoString);
 		
 		return request;
+	}
+	
+	public int findRequestIndexBySSN(String ssn) {
+		// System.out.println("확인용: " + requestList.get(0).getMemberInfo());
+		for (int i=0; i<requestList.size(); ++i) {
+ 	    	if (requestList.get(i).getSSN().equals(ssn)) {
+ 	    		return i;
+ 	    	}    	
+ 	    }
+		return -1;
 	}
 
 }
