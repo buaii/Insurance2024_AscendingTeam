@@ -1,8 +1,8 @@
 kim123
 qwer
 name
-ssn
 phone
+ssn
 type
 type
 date
@@ -15,16 +15,16 @@ phone
 
 park123
 qwer
-name
-ssn
-phoneNum
-type
-type
-date
-details
-hos
-di
-bene
-account
-phone
+name2
+phone2
+ssn2
+type2
+type2
+date2
+details2
+hospital2
+disease2
+bene2
+account2
+phone2
 

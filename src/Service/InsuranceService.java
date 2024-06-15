@@ -146,7 +146,8 @@ public class InsuranceService {
     }
 
     public void requestPayment(BufferedReader reader) throws IOException {
-System.out.println("\n보험금 청구 요청(사고 접수)을 선택하셨습니다.");
+    	
+    	System.out.println("\n보험금 청구 요청(사고 접수)을 선택하셨습니다.");
     	
     	System.out.println("해당 기능은 고객만 이용할 수 있습니다. 로그인을 진행해주세요.\n");
     	System.out.print("아이디를 입력하세요: ");
@@ -177,15 +178,21 @@ System.out.println("\n보험금 청구 요청(사고 접수)을 선택하셨습�
     	memInfoString += name + "\n";
     	inputs.add(name);
     	
-    	System.out.print("주민등록번호: ");
+    	/* System.out.print("주민등록번호: ");
     	String ssn = reader.readLine().trim();
     	memInfoString += ssn + "\n";
-    	inputs.add(ssn);
+    	inputs.add(ssn); */
     	
     	System.out.print("휴대폰 번호: ");
     	String phoneNum = reader.readLine();
     	memInfoString += phoneNum + "\n";
     	inputs.add(phoneNum);
+    	
+    	System.out.print("주민등록번호: ");
+    	String ssn = reader.readLine().trim();
+    	memInfoString += ssn + "\n";
+    	inputs.add(ssn);
+    	reqInfo.setSSN(ssn);
     	
     	reqInfo.setMemberInfo(memInfoString);
     	
@@ -342,10 +349,87 @@ System.out.println("\n보험금 청구 요청(사고 접수)을 선택하셨습�
         // 구현
     }
 
-    public void reviewCoverage(BufferedReader reader) {
+    public void reviewCoverage(BufferedReader reader) throws IOException {
     	 // 6. 보상 검토
-    	// Use case 사고 서류를 심사한다 - Scenario '보험금 지급 심사' 메뉴를 클릭한다
-    	System.out.println("\n보험금 지급 심사를 선택하셨습니다.");
+    	label: while (true) {
+    		System.out.println("\n-----------보험금 지급 심사 메뉴-----------");
+    	    System.out.println("1. 피해 규모 조사");
+    	    System.out.println("2. 손해 사정 의뢰");
+    	    System.out.println("x. 이전 메뉴");
+    	    System.out.print("\n원하는 서비스를 선택하세요: ");
+    	    String choice = reader.readLine();
+    	    switch (choice) {
+    	       case "1":
+    	    	   requestDamageInfo(reader);
+    		       break;
+    	       case "2":
+    	    	   requestLossInvestigation(reader);
+    		       break;
+    	       case "x":
+    	    	   return;
+    		   default:
+    			   System.out.println("\n올바르지 않은 값입니다. 다시 입력해주세요.");
+    			   continue label;
+    		}
+    	}
+    	
+    }
+    
+    public void requestDamageInfo(BufferedReader reader) throws IOException {
+    	// 피해 사실 정보를 요청하다
+    	System.out.println("\n----------- 피해 사실 정보 요청 -----------\n");
+ 	    System.out.println("[ 보험 계약자 정보를 입력해 해당 고객이 이용한 협력 업체를 조회하세요 ]");
+ 	    System.out.print("보험 계약자 이름: ");
+ 	    String customerName = reader.readLine();
+ 	    System.out.print("보험 계약자 주민등록번호: ");
+ 	    String customerSSN = reader.readLine();
+ 	   
+ 	    RequestListImpl listClass = new RequestListImpl("coverageRequests.txt");
+ 	    ArrayList<RequestInsureInfo> coverageReqList = listClass.requestList;
+ 	    for (int i=0; i<coverageReqList.size(); ++i) {
+ 	    	if (coverageReqList.get(i).getSSN().equals(customerSSN)) {
+ 	    		viewAndUploadDamageInfo(reader, coverageReqList.get(i), customerName);
+ 	    		break;
+ 	    	}
+ 	    	if (i == coverageReqList.size()-1) {
+ 	    		System.out.println("입력한 고객의 정보 값이 존재하지 않습니다. 이전 메뉴로 돌아갑니다.");
+ 	    	}
+ 	    }
+    }
+    
+    public void viewAndUploadDamageInfo(BufferedReader reader, RequestInsureInfo coverageReq, String customerName) throws IOException {
+    	System.out.println("[ 고객 정보 ]");
+ 		System.out.println(coverageReq.getMemberInfo());
+ 		System.out.println("[ " + customerName + " 고객이 이용한 협력 업체 ]");
+ 		System.out.println(coverageReq.m_AccidentInfo.getNameOfHospital());
+ 		
+ 		System.out.print("\n해당 협력 업체가 제출한 보고서를 저장할 폴더 경로를 입력하세요: ");
+ 		String targetFolderPathString = reader.readLine();
+    	Path targetFolderPath = Paths.get(targetFolderPathString);
+      	Path reportPath = Paths.get("협력업체가제출한임의의피해규모보고서.txt");
+    	Path fileName = reportPath.getFileName();
+    	Path targetPath = targetFolderPath.resolve(fileName);
+    	Files.copy(reportPath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+    	System.out.println("파일이 성공적으로 저장되었습니다.\n");
+    	
+    	System.out.println("협력 업체가 제출한 피해 규모 보고서 파일을 확인 후, 최종 피해 규모 보고서 파일을 업로드 해주세요.\n");
+    	System.out.println("[ 최종 피해 규모 보고서 파일 업로드 ]");
+    	System.out.print("최종 피해 규모 보고서 파일 경로 입력: ");
+    	String finalReportPathString = reader.readLine();
+    	Path finalReportPath = Paths.get(finalReportPathString);
+        targetFolderPath = Paths.get("Data");
+        fileName = finalReportPath.getFileName();
+        targetPath = targetFolderPath.resolve(fileName);
+        Files.copy(finalReportPath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+    	System.out.println("성공적으로 파일이 등록되었습니다.");
+    }
+    
+    public void requestLossInvestigation (BufferedReader reader) throws IOException {
+    	// 손해 조사를 요청하다
+    	System.out.println("\n----------- 손해 조사 요청 -----------\n");
+ 	    System.out.println("[ 보험사 정보를 입력 ]");
+ 	    System.out.print("보험사 이름: ");
+ 	    // 구현
     }
 
     public void approvePayment(BufferedReader reader) throws IOException {
@@ -399,7 +483,7 @@ System.out.println("\n보험금 청구 요청(사고 접수)을 선택하셨습�
         switch (choice) {
 	        case "1":
 	        	ArrayList<Customer> customerList = constractList.loadCustomer("고객명단.txt");
-	        	System.out.println("\n------------보험금 지급 승인 요청 메뉴------------");
+	        	System.out.println("\n------------보험금 지급 승인 요청 메뉴------------"); // 여기서 전체 고객이 출력됨
 	        	for (int i = 0; i < customerList.size(); ++i) {
 	                System.out.println((i + 1) + ". " + customerList.get(i).getName() + " / " + customerList.get(i).getId());
 	            }
@@ -506,8 +590,8 @@ System.out.println("\n보험금 청구 요청(사고 접수)을 선택하셨습�
     	System.out.println("ID: " + tokens[i++]);
     	System.out.println("PW: " + tokens[i++]);
     	System.out.println("이름: " + tokens[i++]);
-    	System.out.println("주민등록번호: " + tokens[i++]);
     	System.out.println("휴대폰 번호: " +  tokens[i++]);
+    	System.out.println("주민등록번호: " + tokens[i++]);
     	System.out.println();
     }
     

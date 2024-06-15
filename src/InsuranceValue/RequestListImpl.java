@@ -77,8 +77,9 @@ public class RequestListImpl implements RequestList {
 		
 		for (int n=0; n<3; ++n) {
 			infoString += lineArray[++i] + "\n";
-		} // name, SSN, phone number
+		} // name, phone number, SSN
 		
+		request.setSSN(lineArray[i]);
 		request.setMemberInfo(infoString);
 		
 		AccidentInfo accInfo = new AccidentInfo();

@@ -13,6 +13,7 @@ public class RequestInsureInfo {
 	private String beneficiaryInfo;
 	private String bill;
 	private String memberInfo;
+	private String SSN;
 	public AccidentInfo m_AccidentInfo;
 	public Customer m_Customer;
 
@@ -54,6 +55,14 @@ public class RequestInsureInfo {
 
 	public void setMemberInfo(String memberInfo) {
 		this.memberInfo = memberInfo;
+	}
+
+	public String getSSN() {
+		return SSN;
+	}
+
+	public void setSSN(String sSN) {
+		SSN = sSN;
 	}
 
 }
