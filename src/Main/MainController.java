@@ -58,28 +58,6 @@ public class MainController {
             System.out.println(e);
         }
     }
-
-   /* private void handleCustomerLogin() throws IOException {
-        while (true) {
-            menuService.showCustomerMenu();
-            String choice = reader.readLine().trim();
-            switch (choice) {
-               case "1":
-            	insuranceService.requestPayment(reader);
-        	   break;
-               case "2":
-                customerSupportService.roadsideAssist(reader);
-               break;
-               case "3":
-                customerSupportService.requestSupport(reader);
-               break;
-               case "x":
-                return;
-               default:
-                    System.out.println("\n유효하지 않은 값입니다.\n");
-            }
-        }
-    } */
     
     private void handleCustomerLogin() {
     	try {
@@ -109,6 +87,7 @@ public class MainController {
     }
 
     private void handleEmployeeLogin() throws IOException {
+    	try {
         while (true) {
             menuService.showEmployeeMenu();
             String choice = reader.readLine().trim();
@@ -161,6 +140,10 @@ public class MainController {
                     System.out.println("\n유효하지 않은 값입니다.\n");
             }
         }
+    	} catch (IOException e) {
+    		System.out.println("파일을 처리하면서 문제가 발생했습니다. 이전 메뉴로 돌아갑니다.");
+    		e.printStackTrace();
+    	}
     }
 
     private void handleConstract() throws IOException {

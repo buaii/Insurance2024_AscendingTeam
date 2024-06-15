@@ -351,7 +351,7 @@ public class InsuranceService {
 
     public void reviewCoverage(BufferedReader reader) throws IOException {
     	 // 6. 보상 검토
-    	label: while (true) {
+    	while (true) {
     		System.out.println("\n-----------보험금 지급 심사 메뉴-----------");
     	    System.out.println("1. 피해 규모 조사");
     	    System.out.println("2. 손해 사정 의뢰");
@@ -369,10 +369,9 @@ public class InsuranceService {
     	    	   return;
     		   default:
     			   System.out.println("\n올바르지 않은 값입니다. 다시 입력해주세요.");
-    			   continue label;
+    			   continue;
     		}
     	}
-    	
     }
     
     public void requestDamageInfo(BufferedReader reader) throws IOException {
@@ -427,9 +426,130 @@ public class InsuranceService {
     public void requestLossInvestigation (BufferedReader reader) throws IOException {
     	// 손해 조사를 요청하다
     	System.out.println("\n----------- 손해 조사 요청 -----------\n");
- 	    System.out.println("[ 보험사 정보를 입력 ]");
+    	
+    	ArrayList<String> inputs = new ArrayList<>();
+    	
+ 	    System.out.println("[ 보험사 정보 입력 ]");
  	    System.out.print("보험사 이름: ");
- 	    // 구현
+ 	    String companyName = reader.readLine();
+ 	    inputs.add(companyName);
+ 	    
+ 	    System.out.print("보상 담당자 이름: ");
+ 	    String employeeName = reader.readLine();
+ 	    inputs.add(employeeName);
+ 	    
+ 	    System.out.print("보상 담당자 연락처: ");
+ 	    String employeePhoneNum = reader.readLine();
+ 	    inputs.add(employeePhoneNum);
+ 	    
+ 	    System.out.println("\n[ 보험 계약자 정보 입력 ]");
+ 	    System.out.print("보험 계약자 이름: ");
+ 	    String customerName = reader.readLine();
+ 	    inputs.add(customerName);
+ 	    
+ 	    System.out.print("보험 계약자 주민등록번호: ");
+ 	    String customerSSN = reader.readLine();
+ 	    inputs.add(customerSSN);
+ 	    
+ 	    System.out.print("보험 계약자 휴대폰 번호: ");
+ 	    String customerPhoneNum = reader.readLine();
+ 	    inputs.add(customerPhoneNum);
+ 	    
+ 	    System.out.println("\n[사고 정보 입력]");
+ 	    System.out.print("사고 유형: ");
+ 	    String accidentType = reader.readLine();
+ 	    inputs.add(accidentType);
+ 	    
+ 	    System.out.print("청구 유형: ");
+ 	    String billType = reader.readLine();
+ 	    inputs.add(billType);
+ 	    
+ 	    System.out.print("사고 날짜: ");
+ 	    String accidentDate = reader.readLine();
+ 	    inputs.add(accidentDate);
+ 	    
+ 	    System.out.print("사고 경위: ");
+ 	    String accidentDetails = reader.readLine();
+ 	    inputs.add(accidentDetails);
+ 	    
+ 	    System.out.print("진단 병원명: ");
+ 	    String hospital = reader.readLine();
+ 	    inputs.add(hospital);
+ 	    
+ 	    System.out.print("진단명: ");
+ 	    String diagnosis = reader.readLine();
+ 	    inputs.add(diagnosis);
+ 	    
+ 	    System.out.print("사고 현장 사진 파일 경로: ");
+ 	    String imagePathString = reader.readLine();
+ 	    inputs.add(imagePathString);
+ 	    Path imagePath = Paths.get(imagePathString);
+ 	    Path targetFolderPath = Paths.get("Data");
+ 	    Path fileName = imagePath.getFileName();
+ 	    Path targetPath = targetFolderPath.resolve(fileName);
+ 	    Files.copy(imagePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+ 	    
+ 	    System.out.println("\n[ 협력 업체 정보 입력 ]");
+ 	    System.out.println("- 사고와 관련있는 협력 업체가 존재하지 않을 시 '없음' 입력 -");
+ 	    System.out.print("병원 이름: ");
+ 	    hospital = reader.readLine();
+ 	    inputs.add(hospital);
+ 	    
+ 	    System.out.print("병원 전화번호: ");
+ 	    String hospitalContact = reader.readLine();
+ 	    inputs.add(hospitalContact);
+ 	    
+ 	    System.out.print("정비 공장 업체 이름: ");
+ 	    String repairShop = reader.readLine();
+ 	    inputs.add(repairShop);
+ 	    
+ 	    System.out.print("정비 공장 업체 전화번호: ");
+ 	    String repairShopContact = reader.readLine();
+ 	    inputs.add(repairShopContact);
+ 	    
+ 	    System.out.print("긴급 출동 업체 이름: ");
+ 	    String roadAssist = reader.readLine();
+ 	    inputs.add(roadAssist);
+ 	    
+ 	    System.out.print("긴급 출동 업체 전화번호: ");
+ 	    String roadAssistContact = reader.readLine();
+ 	    inputs.add(roadAssistContact);
+ 	    
+    	for (int i=0; i<inputs.size(); i++) {
+    		if (inputs.get(i).equals("")) {
+    			System.out.println("\n입력되지 않은 정보가 있습니다.");
+    		    System.out.println("메뉴를 다시 선택해 필수 정보를 모두 입력해주세요.");
+    		    return;
+    		}
+    	}
+    	
+    	System.out.println("\n[ 파일 업로드 ]");
+    	System.out.print("피해 규모 보고서 파일 경로 입력: ");
+    	String demageReportPathString = reader.readLine();
+    	Path demageReportPath = Paths.get(demageReportPathString);
+    	targetFolderPath = Paths.get("Data");
+ 	    fileName = demageReportPath.getFileName();
+ 	    targetPath = targetFolderPath.resolve(fileName);
+ 	    Files.copy(demageReportPath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+    	
+    	System.out.print("보험 계약서 사본 파일 경로 입력: ");
+    	String contractCopyPathString = reader.readLine();
+    	Path contractCopyPath = Paths.get(contractCopyPathString);
+    	targetFolderPath = Paths.get("Data");
+ 	    fileName = contractCopyPath.getFileName();
+ 	    targetPath = targetFolderPath.resolve(fileName);
+ 	    Files.copy(contractCopyPath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+ 	    
+ 	    System.out.println("\n성공적으로 접수되었습니다. 곧 담당 손해사정사가 연락드리겠습니다.\n");
+ 	    
+ 	    getInvestigationCompleted(reader);
+    	
+    }
+    
+    public void getInvestigationCompleted(BufferedReader reader) throws IOException {
+    	System.out.println("[알림] 손해 조사가 완료되었습니다.");
+    	System.out.println("Enter를 눌러 확인하십시오.");
+    	while (true) if (reader.readLine().trim().equals("")) break;
     }
 
     public void approvePayment(BufferedReader reader) throws IOException {
