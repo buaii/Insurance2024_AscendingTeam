@@ -82,7 +82,7 @@ public class MainController {
             }
     	} catch (IOException e) {
     		System.out.println("파일을 처리하면서 문제가 발생했습니다. 이전 메뉴로 돌아갑니다.");
-    		e.printStackTrace();
+    		// e.printStackTrace();
     	}
     }
 
@@ -142,7 +142,7 @@ public class MainController {
         }
     	} catch (IOException e) {
     		System.out.println("파일을 처리하면서 문제가 발생했습니다. 이전 메뉴로 돌아갑니다.");
-    		e.printStackTrace();
+    		// e.printStackTrace();
     	}
     }
 
