@@ -1,6 +1,10 @@
 package Service;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
@@ -15,7 +19,7 @@ public class CustomerSupportService {
 
     public void requestSupport(BufferedReader reader) throws IOException {
         System.out.println("고객 지원 요청을 선택하셨습니다.");
-        // 메소드 구현
+        offerSupport(reader);
     }
 
     public void happyCall(BufferedReader reader) throws IOException {
@@ -41,6 +45,7 @@ public class CustomerSupportService {
                 choice = reader.readLine().trim();
                 if (choice.equals("")) {
                     System.out.println("존재하지 않는 고객 정보입니다. 입력한 내용을 다시 확인해주세요.");
+                    return;
                 }
                 complaints.setCustomerInfo(choice);
                 
@@ -51,6 +56,7 @@ public class CustomerSupportService {
                 System.out.print("4. 민원 내용 입력 : ");
                 choice = reader.readLine().trim();
                 complaints.setDetails(choice);
+                
                 // 날짜 자동 입력
                 LocalDateTime currentDateTime = LocalDateTime.now();
                 complaints.setDate(currentDateTime.toString());
@@ -58,30 +64,69 @@ public class CustomerSupportService {
                 System.out.print("5.확인/6.취소 : ");
                 choice = reader.readLine().trim();
                 if (choice.equals("5")) {
+                    saveComplaintToFile(complaints);
                     System.out.println("민원신청이 완료되었습니다.");
                 } else {
                     System.out.println("민원신청이 취소되었습니다.");
                 }
                 
             } else if (choice.equals("2")) {
-                System.out.println("----------민원 확인----------");
-                System.out.println("1. 고객 ID : " + complaints.getCustomerID());
-                System.out.println("2. 고객 정보 : " + complaints.getCustomerInfo());
-                System.out.println("3. 제목 : " + complaints.getTitle());
-                System.out.println("4. 접수날짜 : " + complaints.getDate());
-                System.out.println("5. 민원 내용 : " + complaints.getDetails());
-                System.out.println("----------민원 담당부서 배치----------");
-                System.out.print("1. 담당부서 배치 : ");
-                choice = reader.readLine().trim();
-                complaints.setDepartment(choice);
-                System.out.println("담당부서 배치가 완료되었습니다.");
-                
+                Complaints savedComplaint = readComplaintFromFile();
+                if (savedComplaint != null) {
+                    System.out.println("----------민원 확인----------");
+                    System.out.println("1. 고객 ID : " + savedComplaint.getCustomerID());
+                    System.out.println("2. 고객 정보 : " + savedComplaint.getCustomerInfo());
+                    System.out.println("3. 제목 : " + savedComplaint.getTitle());
+                    System.out.println("4. 접수날짜 : " + savedComplaint.getDate());
+                    System.out.println("5. 민원 내용 : " + savedComplaint.getDetails());
+                    System.out.println("----------민원 담당부서 배치----------");
+                    System.out.print("1. 담당부서 배치 : ");
+                    choice = reader.readLine().trim();
+                    savedComplaint.setDepartment(choice);
+                    System.out.println("담당부서 배치가 완료되었습니다.");
+                } else {
+                    System.out.println("저장된 민원이 없습니다.");
+                }
             } else {
                 System.out.println("\n유효하지 않은 값입니다. 초기 화면으로 돌아갑니다.\n");
                 return;
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("시스템에 문제가 생겨서 화면이 나오지 않습니다. 다시 시도해주세요");
         }
+    }
+
+    private void saveComplaintToFile(Complaints complaints) throws IOException {
+        try (FileWriter fileWriter = new FileWriter("complaint.txt");
+             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+            bufferedWriter.write(complaints.getCustomerID());
+            bufferedWriter.newLine();
+            bufferedWriter.write(complaints.getCustomerInfo());
+            bufferedWriter.newLine();
+            bufferedWriter.write(complaints.getTitle());
+            bufferedWriter.newLine();
+            bufferedWriter.write(complaints.getDetails());
+            bufferedWriter.newLine();
+            bufferedWriter.write(complaints.getDate());
+        }
+    }
+
+    private Complaints readComplaintFromFile() throws IOException {
+        File file = new File("complaint.txt");
+        if (!file.exists()) {
+            return null;
+        }
+        
+        Complaints complaints = new Complaints();
+        try (FileReader fileReader = new FileReader(file);
+             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+            complaints.setCustomerID(bufferedReader.readLine());
+            complaints.setCustomerInfo(bufferedReader.readLine());
+            complaints.setTitle(bufferedReader.readLine());
+            complaints.setDetails(bufferedReader.readLine());
+            complaints.setDate(bufferedReader.readLine());
+        }
+        
+        return complaints;
     }
 }
