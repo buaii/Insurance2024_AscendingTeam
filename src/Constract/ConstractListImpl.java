@@ -220,7 +220,7 @@ public class ConstractListImpl implements ConstractList {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length >= 22) { 
+                if (parts.length >= 23) { 
                     Customer customer = new Customer(
                         parts[1].trim(),
                         parts[2].trim(),

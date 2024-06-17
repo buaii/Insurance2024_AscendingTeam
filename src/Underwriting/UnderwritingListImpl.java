@@ -25,7 +25,7 @@ public class UnderwritingListImpl implements UnderwritingList {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length != 22) {
+                if (parts.length != 23) {
                     continue;
                 }
                 Customer customer = new Customer(
