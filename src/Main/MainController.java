@@ -143,6 +143,8 @@ public class MainController {
     	} catch (IOException e) {
     		System.out.println("파일을 처리하면서 문제가 발생했습니다. 이전 메뉴로 돌아갑니다.");
     		// e.printStackTrace();
+    	} catch (IndexOutOfBoundsException e) {
+    		System.out.println("해당하는 정보 값이 존재하지 않습니다. 이전 메뉴로 돌아갑니다.");
     	}
     }
 
